@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cybersecurity Threat Detection</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: radial-gradient(circle at top, #0a1a2f, #020814);
+            color: #e6f1ff;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: #0f172a;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,.6);
+        }
+
+        .headline {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .badge-attack {
+            background: #ef4444;
+        }
+
+        .badge-benign {
+            background: #22c55e;
+        }
+
+        .summary-box span {
+            font-weight: 600;
+        }
+
+        .hint-text {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container py-5">
+
+    <div class="text-center mb-4">
+        <h2>🛡️ Cybersecurity Threat Detection</h2>
+        <p class="text-secondary">
+            Upload network traffic CSV to detect malicious activity
+        </p>
+    </div>
+
+    <!-- Upload -->
+    <div class="card p-4 mb-4">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" class="form-control mb-3" required>
+            <button class="btn btn-primary w-100">
+                Analyze Traffic
+            </button>
+        </form>
+    </div>
+
+    <!-- Messages -->
+    {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <!-- Headline Attack -->
+    {% if headline_attack %}
+        <div class="card p-3 mb-4 text-center">
+            <div class="headline">
+                🚨 Detected Threat:
+                <span class="badge {% if headline_attack == 'BENIGN' %}badge-benign{% else %}badge-attack{% endif %}">
+                    {{ headline_attack }}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Threat Summary -->
+    {% if summary %}
+        <div class="card p-4 mb-4">
+            <h5 class="mb-3">📊 Threat Summary</h5>
+            <div class="row">
+                {% for k, v in summary.items() %}
+                    <div class="col-md-4 summary-box mb-2">
+                        <span>{{ k }}</span>: {{ v }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Prediction Table -->
+    {% if table %}
+        <div class="card p-4">
+            <h5 class="mb-2">📄 Prediction Preview</h5>
+            <p class="hint-text">
+                Showing a preview of results. Download the full CSV for all predictions.
+            </p>
+
+            <div class="table-responsive">
+                {{ table | safe }}
+            </div>
+
+            <!-- ✅ DOWNLOAD BUTTON (NEW) -->
+            {% if download_ready %}
+            <div class="text-center mt-4">
+                <a href="/download" class="btn btn-success">
+                    ⬇ Download Full Prediction CSV
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

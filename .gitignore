@@ -1,0 +1,23 @@
+# Data & uploads
+data/
+uploads/
+*.csv
+
+# Models & artifacts
+*.pkl
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environments
+.env
+.venv
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
